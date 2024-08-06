@@ -1,0 +1,1755 @@
+{
+  "global": {
+    "show_in_menu_bar": false
+  },
+  "profiles": [
+    {
+      "name": "Default",
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Option Key Held In",
+            "manipulators": [
+              {
+                "description": "Option Key + = -> increase volume",
+                "from": {
+                  "key_code": "equal_sign",
+                  "modifiers": {
+                    "mandatory": [
+                      "option"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "volume_up"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "Option Key + - -> increase volume",
+                "from": {
+                  "key_code": "hyphen",
+                  "modifiers": {
+                    "mandatory": [
+                      "option"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "volume_down"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key (⌃⌥⇧⌘)",
+            "manipulators": [
+              {
+                "description": "Caps Lock -> Hyper Key",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 1
+                    }
+                  }
+                ],
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper",
+                      "value": 0
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + down_arrow",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "\n             # Get the ID of the currently focused window\n            current_window_id=$(/opt/homebrew/bin/yabai -m query --windows --window | /opt/homebrew/bin/jq -r '.id')\n\n            # Minimize the currently focused window\n            /opt/homebrew/bin/yabai -m window --minimize\n\n            # Get the list of windows\n            windows=$(/opt/homebrew/bin/yabai -m query --windows)\n\n            # Find the next window to focus on\n            next_window_id=$(echo \"$windows\" | /opt/homebrew/bin/jq -r --arg current_window_id \"$current_window_id\" '\n            .[] | select(.id != ($current_window_id | tonumber) and\n                        (.[\"is-visible\"] // false) == true and\n                        (.[\"is-minimized\"] // false) == false) | .id' | head -n 1)\n\n            # Focus on the next window\n            if [ -n \"$next_window_id\" ]; then\n            /opt/homebrew/bin/yabai -m window --focus \"$next_window_id\"\n            else\n            echo \"No next window to focus on.\"\n            fi\n"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "down_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key sublayer \"w\"",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer w",
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_w",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_w",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --focus $(yabai -m query --windows | jq -r '.[] | select(.app == \"Google Chrome\") | .id')"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "up_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "down_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "left_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "right_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == \"bsp\" then \"float\" else \"bsp\" end')"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "t",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --toggle float"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key sublayer \"z\"",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer z",
+                "type": "basic",
+                "from": {
+                  "key_code": "z",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_z",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_z",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --focus $(yabai -m query --windows | jq -r '.[] | select(.app == \"Google Chrome\") | .id')"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "up_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap south || $(yabai -m window --display south; yabai -m display --focus south)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "down_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap west || $(yabai -m window --display west; yabai -m display --focus west)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "left_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --swap east || $(yabai -m window --display east; yabai -m display --focus east)"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "right_arrow",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + s",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + d",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "/opt/homebrew/bin/yabai -m window --toggle float"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "d",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + semicolon",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+                  }
+                ],
+                "description": "Open raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+                "type": "basic",
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key sublayer \"q\"",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer q",
+                "type": "basic",
+                "from": {
+                  "key_code": "q",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_q",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_q",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open raycast://extensions/appest/ticktick/create"
+                  }
+                ],
+                "description": "Open raycast://extensions/appest/ticktick/create",
+                "type": "basic",
+                "from": {
+                  "key_code": "t",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + j",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open raycast://extensions/raycast/raycast-ai/ai-chat"
+                  }
+                ],
+                "description": "Open raycast://extensions/raycast/raycast-ai/ai-chat",
+                "type": "basic",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + comma",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open Google Chrome"
+                  }
+                ],
+                "description": "Open Google Chrome",
+                "type": "basic",
+                "from": {
+                  "key_code": "comma",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + period",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open Visual Studio Code"
+                  }
+                ],
+                "description": "Open Visual Studio Code",
+                "type": "basic",
+                "from": {
+                  "key_code": "period",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key + slash",
+            "manipulators": [
+              {
+                "to": [
+                  {
+                    "shell_command": "open WezTerm"
+                  }
+                ],
+                "description": "Open WezTerm",
+                "type": "basic",
+                "from": {
+                  "key_code": "slash",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Hyper Key sublayer \"o\"",
+            "manipulators": [
+              {
+                "description": "Toggle Hyper sublayer o",
+                "type": "basic",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_o",
+                      "value": 0
+                    }
+                  }
+                ],
+                "to": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_sublayer_o",
+                      "value": 1
+                    }
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_down_arrow",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_w",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_z",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_s",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_d",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_semicolon",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_q",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_j",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_comma",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_period",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_slash",
+                    "value": 0
+                  },
+                  {
+                    "type": "variable_if",
+                    "name": "hyper",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a '1Password.app'"
+                  }
+                ],
+                "description": "Open -a '1Password.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "p",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'Obsidian.app'"
+                  }
+                ],
+                "description": "Open -a 'Obsidian.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'Mail.app'"
+                  }
+                ],
+                "description": "Open -a 'Mail.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "m",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'QSpace.app'"
+                  }
+                ],
+                "description": "Open -a 'QSpace.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "f",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'Spotify.app'"
+                  }
+                ],
+                "description": "Open -a 'Spotify.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "s",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a \"Google Chrome\""
+                  },
+                  {
+                    "shell_command": "~/Dropbox/Dev/Raycast/Scripts/open-link-in-chrome.sh Outlook"
+                  }
+                ],
+                "description": "Open link in Chrome: Outlook",
+                "type": "basic",
+                "from": {
+                  "key_code": "c",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'Microsoft Teams.app'"
+                  }
+                ],
+                "description": "Open -a 'Microsoft Teams.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "t",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a 'WhatsApp.app'"
+                  }
+                ],
+                "description": "Open -a 'WhatsApp.app'",
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a \"Google Chrome\""
+                  },
+                  {
+                    "shell_command": "~/Dropbox/Dev/Raycast/Scripts/open-link-in-chrome.sh Notion"
+                  }
+                ],
+                "description": "Open link in Chrome: Notion",
+                "type": "basic",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a \"Google Chrome\""
+                  },
+                  {
+                    "shell_command": "~/Dropbox/Dev/Raycast/Scripts/open-link-in-chrome.sh Clickup"
+                  }
+                ],
+                "description": "Open link in Chrome: Clickup",
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a \"Google Chrome\""
+                  },
+                  {
+                    "shell_command": "~/Dropbox/Dev/Raycast/Scripts/open-link-in-chrome.sh Everhour"
+                  }
+                ],
+                "description": "Open link in Chrome: Everhour",
+                "type": "basic",
+                "from": {
+                  "key_code": "e",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              },
+              {
+                "to": [
+                  {
+                    "shell_command": "open -a \"Google Chrome\""
+                  },
+                  {
+                    "shell_command": "~/Dropbox/Dev/Raycast/Scripts/open-link-in-chrome.sh Slack"
+                  }
+                ],
+                "description": "Open link in Chrome: Slack",
+                "type": "basic",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_sublayer_o",
+                    "value": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
