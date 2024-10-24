@@ -13,7 +13,7 @@ const jq = "/opt/homebrew/bin/jq";
 
 const scriptsDir = "/Users/ruaan/Dropbox/Dev/Raycast/Scripts";
 
-const yabaiScripts = {
+const scripts = {
   minimise: `
              # Get the ID of the currently focused window
             current_window_id=$(${yabai} -m query --windows --window | ${jq} -r '.id')
@@ -37,25 +37,11 @@ const yabaiScripts = {
             echo "No next window to focus on."
             fi
 `,
-  maximise_all: `
-  
-# Get the list of windows
-windows=$(${yabai} -m query --windows)
-
-# Define padding values (modify as needed)
-padding_top=10
-padding_bottom=10
-padding_left=10
-padding_right=10
-
-# Maximize each window while keeping padding
-echo "$windows" | ${jq} -r '.[] | .id' | while read -r window_id; do
-    ${yabai} -m window "$window_id" --toggle zoom-fullscreen
-    ${yabai} -m window "$window_id" --move abs:$(($padding_left + 1)),$(($padding_top + 1))
-    ${yabai} -m window "window_id" --resize abs:$(($((${yabai} -m query --spaces --space | ${jq} '.frame.w')) - $padding_left - $padding_right)),$(($((${yabai} -m query --spaces --space | ${jq} '.frame.h')) - $padding_top - $padding_bottom))
-done
-
-`,
+  maximise: `open -g "rectangle-pro://execute-action?name=maximize"`,
+  splitLeft: `open -g "rectangle-pro://execute-action?name=left-half"`,
+  splitRight: `open -g "rectangle-pro://execute-action?name=right-half"`,
+  appNextDisplay: `open -g "rectangle-pro://execute-action?name=app-next-display"`,
+  appPrevDisplay: `open -g "rectangle-pro://execute-action?name=app-prev-display"`,
 };
 
 const shellCommands = {
@@ -261,36 +247,6 @@ const rules: KarabinerRules[] = [
       2: shellCommands.switchToSpace2,
       3: shellCommands.switchToSpace3,
 
-      // minimise
-      down_arrow: {
-        to: [
-          {
-            shell_command: yabaiScripts.minimise,
-          },
-        ],
-      },
-
-      w: {
-        up_arrow: shellCommands.yabaiFocusUp,
-        down_arrow: shellCommands.yabaiFocusDown,
-        left_arrow: shellCommands.yabaiFocusLeft,
-        right_arrow: shellCommands.yabaiFocusRight,
-        equal_sign: shellCommands.yabaiSizeUp,
-        hyphen: shellCommands.yabaiSizeDown,
-
-        // yaba toggle layout
-        l: shellCommands.yabaiToggleLayout,
-        f: shellCommands.yabaiToggleFullscreen,
-        d: shellCommands.yabaiToggleFloat,
-      },
-
-      z: {
-        up_arrow: shellCommands.yabaiMoveUp,
-        down_arrow: shellCommands.yabaiMoveDown,
-        left_arrow: shellCommands.yabaiMoveLeft,
-        right_arrow: shellCommands.yabaiMoveRight,
-      },
-
       s: {
         to: [
           {
@@ -301,7 +257,7 @@ const rules: KarabinerRules[] = [
       d: {
         to: [
           {
-            shell_command: `${yabai} -m window --toggle float`,
+            shell_command: `~/Dropbox/Dev/Raycast/Scripts/yabai/toggle-window-floating-tiling.sh`,
           },
         ],
       },
@@ -309,36 +265,96 @@ const rules: KarabinerRules[] = [
       semicolon: open(
         "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
       ),
-
-      // quick add
+      c: open(
+        "raycast://extensions/raycast/clipboard-history/clipboard-history"
+      ),
       q: {
         t: open("raycast://extensions/appest/ticktick/create"),
       },
-
       g: open("raycast://extensions/josephschmitt/gif-search/search"),
-      p: open(
-        "raycast://extensions/raycast/clipboard-history/clipboard-history"
-      ),
       j: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
-      comma: app("Google Chrome"),
-      period: app("Visual Studio Code"),
-      slash: app("WezTerm"),
 
+      z: app("WezTerm"),
+      x: app("Arc"),
+      e: app("Visual Studio Code"),
+      t: {
+        to: [
+          {
+            shell_command: `osascript -e 'tell application "Arc" to activate' -e 'delay 1' -e 'tell application "System Events" to keystroke "t" using {command down}'`,
+          },
+        ],
+      },
+      p: app("1Password"),
+
+      w: {
+        r: {
+          to: [
+            {
+              shell_command: `open -g "rectangle-pro://execute-action?name=restore"`,
+            },
+          ],
+        },
+        t: {
+          to: [
+            {
+              shell_command: `open -g "rectangle-pro://execute-action?name=tidy"`,
+            },
+          ],
+        },
+        open_bracket: {
+          to: [
+            {
+              shell_command: scripts.appPrevDisplay,
+            },
+          ],
+        },
+        close_bracket: {
+          to: [
+            {
+              shell_command: scripts.appNextDisplay,
+            },
+          ],
+        },
+        up_arrow: {
+          to: [
+            {
+              shell_command: scripts.maximise,
+            },
+          ],
+        },
+        down_arrow: {
+          to: [
+            {
+              shell_command: scripts.minimise,
+            },
+          ],
+        },
+        right_arrow: {
+          to: [
+            {
+              shell_command: scripts.splitRight,
+            },
+          ],
+        },
+        left_arrow: {
+          to: [
+            {
+              shell_command: scripts.splitLeft,
+            },
+          ],
+        },
+      },
       // open apps
       o: {
-        p: app("1Password"), // Password Manager
         n: app("Obsidian"), // Notes
         m: app("Mail"), // Mail
         f: app("QSpace"), // Finder
-        s: app("Spotify"), // Apple Music
+        p: app("Spotify"), // Apple Music
         t: app("Microsoft Teams"), // y = Messaging
         w: app("WhatsApp"), // WhatsApp
-
-        c: openLinkInChrome("Outlook"),
-        o: openLinkInChrome("Notion"), // nOtion
-        l: openLinkInChrome("Clickup"), // cLickup
-        e: openLinkInChrome("Everhour"),
-        a: openLinkInChrome("Slack"), // sLack
+        s: app("Slack"), // sLack
+        i: app("ClickUp"), // ClickUp
+        c: app("Microsoft Outlook"),
       },
     },
     {}
