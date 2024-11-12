@@ -275,26 +275,13 @@ const rules: KarabinerRules[] = [
       j: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
 
       z: app("WezTerm"),
-      x: app("Arc"),
+      x: app("Brave Browser"),
       e: app("Visual Studio Code"),
-      t: {
-        to: [
-          {
-            shell_command: `osascript -e 'tell application "Arc" to activate' -e 'delay 1' -e 'tell application "System Events" to keystroke "t" using {command down}'`,
-          },
-        ],
-      },
+      t: open("raycast://extensions/ron-myers/brave/search-tab"),
       p: app("1Password"),
 
       w: {
         r: {
-          to: [
-            {
-              shell_command: `open -g "rectangle-pro://execute-action?name=restore"`,
-            },
-          ],
-        },
-        t: {
           to: [
             {
               shell_command: `open -g "rectangle-pro://execute-action?name=tidy"`,
