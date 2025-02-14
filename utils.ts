@@ -244,3 +244,24 @@ export function openLinkInChrome(args: string) {
     description: `Open link in Chrome: ${args}`,
   };
 }
+
+export const raycastDeepLink = (deeplink: string) => {
+  // Close only the "Raycast: AI Chat" window before invoking deeplink
+  return {
+    to: [
+      {
+        shell_command: `bash -c "osascript -e 'tell application \\"System Events\\" to tell process \\"Raycast\\" to if (exists window \\"Raycast: AI Chat\\") then click (first button of window \\"Raycast: AI Chat\\")' && open -g \\"${deeplink}\\""`,
+      },
+    ],
+  };
+};
+
+export const deeplink = (link: string): LayerCommand => {
+  return {
+    to: [
+      {
+        shell_command: `open -g "${link}"`,
+      },
+    ],
+  };
+};

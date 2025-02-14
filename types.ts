@@ -419,3 +419,14 @@ export type KeyCode =
   //   not_from: true
   | "volume_down"
   | "volume_up";
+
+export interface HyperKeySublayer {
+  [key_code in KeyCode]?: LayerCommand;
+  description?: string;
+}
+
+export interface LayerCommand {
+  to?: To[];
+  to_after_key_up?: To[];
+  description?: string;
+}
